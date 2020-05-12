@@ -13,6 +13,34 @@ class GerarAta extends StatefulWidget {
 
 class _GerarAtaState extends State<GerarAta> {
 
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay pickedTime;
+
+  Future<Null> selectTime (BuildContext context) async{
+    pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _time,
+    );
+    setState(() {
+      _time = pickedTime;
+      print(_time);
+    });
+  }
+
+  TimeOfDay _timeF = TimeOfDay.now();
+  TimeOfDay pickedTimeF;
+
+  Future<Null> selectTimeF (BuildContext context) async{
+    pickedTimeF = await showTimePicker(
+      context: context,
+      initialTime: _timeF,
+    );
+    setState(() {
+      _timeF = pickedTimeF;
+      print(_timeF);
+    });
+  }
+
   DateTime _date = DateTime.now();
 
   Future<Null> selectedDate(BuildContext context) async {
@@ -246,16 +274,13 @@ class _GerarAtaState extends State<GerarAta> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "HH : MM"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectTime(context);
+                        },
+                        label: Text('Hora'),
+                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),
@@ -284,16 +309,13 @@ class _GerarAtaState extends State<GerarAta> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "HH : MM"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectTimeF(context);
+                        },
+                        label: Text('Hora'),
+                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),

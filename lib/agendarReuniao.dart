@@ -5,8 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:prototiposistemadeatas/confirmarAgendamento.dart';
+import 'package:prototiposistemadeatas/previewAgendamento.dart';
 import 'package:prototiposistemadeatas/reuniaoContinuidade.dart';
 import 'package:prototiposistemadeatas/reuniaoExtraordinaria.dart';
+
+import 'main.dart';
 
 class AgendarReuniao extends StatefulWidget {
   @override
@@ -14,6 +17,51 @@ class AgendarReuniao extends StatefulWidget {
 }
 
 class _AgendarReuniaoState extends State<AgendarReuniao> {
+
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay pickedTime;
+
+  Future<Null> selectTime (BuildContext context) async{
+    pickedTime = await showTimePicker(
+      context: context,
+      initialTime: _time,
+    );
+    setState(() {
+      _time = pickedTime;
+      print(_time);
+    });
+  }
+
+  TimeOfDay _timeF = TimeOfDay.now();
+  TimeOfDay pickedTimeF;
+
+  Future<Null> selectTimeF (BuildContext context) async{
+    pickedTimeF = await showTimePicker(
+      context: context,
+      initialTime: _timeF,
+    );
+    setState(() {
+      _timeF = pickedTimeF;
+      print(_timeF);
+    });
+  }
+
+  DateTime _date = DateTime.now();
+
+  Future<Null> selectedDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2021)
+    );
+    if (picked != null && picked != _date){
+      setState(() {
+        _date = picked;
+        print(_date.toString());
+      });
+    }
+  }
 
   final _itemController = TextEditingController();
 
@@ -232,16 +280,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "Insira data"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectedDate(context);
+                        },
+                        label: Text('Data'),
+                        icon: Icon(Icons.event, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),
@@ -270,16 +315,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "HH : MM"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectTime(context);
+                        },
+                        label: Text('Hora'),
+                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),
@@ -308,16 +350,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "HH : MM"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectTimeF(context);
+                        },
+                        label: Text('Hora'),
+                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),
@@ -661,12 +700,12 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   onPressed: (){
                     Navigator.push(context,
                     MaterialPageRoute(
-                      builder: (context) => ConfirmarAgendamento(),
+                      builder: (context) => PreviewAgendamento(),
                     ),);
                   },
                   color: Color(0xFF2c3e50),
-                  icon: Icon(Icons.event_available, color: Colors.white,),
-                  label: Text("Agendar reunião", style: TextStyle(
+                  icon: Icon(Icons.event, color: Colors.white,),
+                  label: Text("Agendar", style: TextStyle(
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold,
                       color: Colors.white
@@ -674,7 +713,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                 ),
                 SizedBox(width: 10.0,),
                 FlatButton.icon(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(
+                          builder: (context) => Home(),
+                        ),
+                    );
+                  },
                   color: Colors.red,
                   icon: Icon(Icons.cancel, color: Colors.white,),
                   label: Text("Cancelar", style: TextStyle(
