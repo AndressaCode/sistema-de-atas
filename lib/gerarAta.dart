@@ -13,6 +13,22 @@ class GerarAta extends StatefulWidget {
 
 class _GerarAtaState extends State<GerarAta> {
 
+  DateTime _date = DateTime.now();
+
+  Future<Null> selectedDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2021)
+    );
+    if (picked != null && picked != _date){
+      setState(() {
+        _date = picked;
+        print(_date.toString());
+      });
+    }
+  }
 
   final _itemController = TextEditingController();
 
@@ -195,16 +211,13 @@ class _GerarAtaState extends State<GerarAta> {
                     height: 30.0,
                     color: Color(0xFFecf0f1),
                     child: Center(
-                      child: TextField(
-                        //autofocus: true,
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(
-                          color: Color(0xFF2c3e50),
-                          fontSize: 15.0,
-                        ),
-                        decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "Insira data"
+                      child: FlatButton.icon(
+                        onPressed: () {
+                          selectedDate(context);
+                        },
+                        label: Text('Data'),
+                        icon: Icon(Icons.event, color: Color(0xFF2c3e50),
+                          size: 30.0,
                         ),
                       ),
                     ),
