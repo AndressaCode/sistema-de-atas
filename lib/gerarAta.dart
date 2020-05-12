@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:prototiposistemadeatas/previewAta.dart';
+import 'package:prototiposistemadeatas/selecionarArquivo.dart';
 
 class GerarAta extends StatefulWidget {
   @override
@@ -71,7 +73,10 @@ class _GerarAtaState extends State<GerarAta> {
     'Wendel Irmão',
     'Jetson Edson',
     'Adriano Bio',
-    'Marcelo Arquiteto'
+    'Marcelo Arquiteto',
+    'SDS',
+    'SBDS',
+    'CTIC'
   ];
 
   @override
@@ -850,7 +855,12 @@ class _GerarAtaState extends State<GerarAta> {
               children: [
                 SizedBox(width: 30.0,),
                 FlatButton.icon(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context,
+                    MaterialPageRoute(
+                      builder: (context) => AnexarArquivo(),
+                    ),);
+                  },
                   color: Color(0xffd35300),
                   icon: Icon(Icons.library_add, color: Colors.white),
                   label: Text("Anexar documentos a ata", style: TextStyle(
@@ -879,7 +889,12 @@ class _GerarAtaState extends State<GerarAta> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FlatButton.icon(
-                  onPressed: (){},
+                  onPressed: (){
+                    Navigator.push(context,
+                    MaterialPageRoute(
+                      builder: (context) => Preview(),
+                    ),);
+                  },
                   color: Color(0xFF2c3e50),
                   icon: Icon(Icons.picture_as_pdf, color: Colors.white,),
                   label: Text("Preview", style: TextStyle(
