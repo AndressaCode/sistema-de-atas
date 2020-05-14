@@ -101,27 +101,27 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
   ];
 
   List<String> _convocados = <String>[
+    'Adriano Bio',
     'Andressa Silva de Souza',
     'George Barbalho da Silva Sauro',
-    'Thiago Dutra',
-    'Wellington Costa',
-    'Thompson Pereira',
-    'Wendel Irmão',
     'Jetson Edson',
-    'Adriano Bio',
-    'Marcelo Arquiteto'
+    'Marcelo Arquiteto',
+    'Thiago Dutra',
+    'Thompson Pereira',
+    'Wellington Costa',
+    'Wendel Irmão',
   ];
 
   List<String> _responsaveis = <String>[
+    'Adriano Bio',
     'Andressa Silva de Souza',
     'George Barbalho da Silva Sauro',
-    'Thiago Dutra',
-    'Wellington Costa',
-    'Thompson Pereira',
-    'Wendel Irmão',
     'Jetson Edson',
-    'Adriano Bio',
-    'Marcelo Arquiteto'
+    'Marcelo Arquiteto',
+    'Thiago Dutra',
+    'Thompson Pereira',
+    'Wellington Costa',
+    'Wendel Irmão',
   ];
 
   @override
@@ -463,6 +463,73 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           ),
           /*--------------------- FIM OBJETIVO DA REUNIÃO ----------------*/
 
+          /*------------------- PARTICIPANTES DE REUNIÃO ----------------*/
+          Center(
+            child: Text("Participantes da reunião", style: TextStyle(
+              color: Colors.grey,
+              fontSize: 12.0,
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+            ),
+            ),
+          ),
+          Container(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100.0,
+                  height: 50.0,
+                  child: Center(
+                    child: Text("Participantes", style: TextStyle(
+                        color: Color(0xFF2c3e50),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold
+                    ),),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    //padding: EdgeInsets.only(left: 10.0),
+                    height: 30.0,
+                    color: Color(0xFFecf0f1),
+                    child: DropdownButton(
+                      items: _convocados
+                          .map((value) => DropdownMenuItem(
+                        child: Text(
+                          value,
+                          style: TextStyle(color: Color(0xFF2c3e50),),
+                        ),
+                        value: value,
+                      ))
+                          .toList(),
+                      onChanged: (selectedConvocados){
+                        print('$selectedConvocados');
+                        setState(() {
+                          selectedConvocados = selectedConvocados;
+                        });
+                        setState(() {
+                          selectedPessoa = selectedConvocados;
+                        });
+                      },
+                      value: selectedPessoa,
+                      isExpanded: true,
+                      hint: Text('Selecione participantes',
+                        style: TextStyle(
+                          color: Colors.grey[700],
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 30.0),
+              ],
+            ),
+          ),
+
+          /*--------------- FIM PARTICIPANTES DE REUNIÃO ----------------*/
+
           /*--------------------- RESPONSÁVEL DE REUNIÃO ----------------*/
           // Texto "Responsável"
           Center(
@@ -535,73 +602,6 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
             ),
           ),
           /*----------------- FIM RESPONSÁVEL DE REUNIÃO ----------------*/
-
-          /*------------------- PARTICIPANTES DE REUNIÃO ----------------*/
-          Center(
-            child: Text("Participantes da reunião", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 100.0,
-                  height: 50.0,
-                  child: Center(
-                    child: Text("Participantes", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    //padding: EdgeInsets.only(left: 10.0),
-                    height: 30.0,
-                    color: Color(0xFFecf0f1),
-                    child: DropdownButton(
-                      items: _convocados
-                          .map((value) => DropdownMenuItem(
-                        child: Text(
-                          value,
-                          style: TextStyle(color: Color(0xFF2c3e50),),
-                        ),
-                        value: value,
-                      ))
-                          .toList(),
-                      onChanged: (selectedConvocados){
-                        print('$selectedConvocados');
-                        setState(() {
-                          selectedConvocados = selectedConvocados;
-                        });
-                        setState(() {
-                          selectedPessoa = selectedConvocados;
-                        });
-                      },
-                      value: selectedPessoa,
-                      isExpanded: true,
-                      hint: Text('Selecione participantes',
-                        style: TextStyle(
-                          color: Colors.grey[700],
-                          fontSize: 14.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 30.0),
-              ],
-            ),
-          ),
-
-          /*--------------- FIM PARTICIPANTES DE REUNIÃO ----------------*/
 
           /*------------------ INÍCIO PAUTA DE REUNIÃO -----------------*/
           Center(
