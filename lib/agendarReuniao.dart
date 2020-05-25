@@ -396,8 +396,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           fontSize: 15.0,
                         ),
                         decoration: InputDecoration(
-                          //border: InputBorder.none,
-                            hintText: "Local de reunião"
+                          border: OutlineInputBorder(),
+                            //hintText: "Local de reunião"
                         ),
                       ),
                     ),
@@ -451,7 +451,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           fontSize: 15.0,
                         ),
                         decoration: InputDecoration(
-                          hintText: "Informe objetivo para a reunião",
+                          border: OutlineInputBorder(),
+                          //hintText: "Informe objetivo para a reunião",
                         ),
                       ),
                     ),
