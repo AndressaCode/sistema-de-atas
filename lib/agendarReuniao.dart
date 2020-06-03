@@ -17,11 +17,10 @@ class AgendarReuniao extends StatefulWidget {
 }
 
 class _AgendarReuniaoState extends State<AgendarReuniao> {
-
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay pickedTime;
 
-  Future<Null> selectTime (BuildContext context) async{
+  Future<Null> selectTime(BuildContext context) async {
     pickedTime = await showTimePicker(
       context: context,
       initialTime: _time,
@@ -35,7 +34,7 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
   TimeOfDay _timeF = TimeOfDay.now();
   TimeOfDay pickedTimeF;
 
-  Future<Null> selectTimeF (BuildContext context) async{
+  Future<Null> selectTimeF(BuildContext context) async {
     pickedTimeF = await showTimePicker(
       context: context,
       initialTime: _timeF,
@@ -53,9 +52,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
         context: context,
         initialDate: _date,
         firstDate: DateTime(2020),
-        lastDate: DateTime(2021)
-    );
-    if (picked != null && picked != _date){
+        lastDate: DateTime(2021));
+    if (picked != null && picked != _date) {
       setState(() {
         _date = picked;
         print(_date.toString());
@@ -69,19 +67,18 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
   Map<String, dynamic> _lastRemoved;
   int _lastRemovedPos;
 
-
   @override
   void initState() {
     super.initState();
 
-    _readData().then((data){
+    _readData().then((data) {
       setState(() {
         _itensDePauta = json.decode(data);
       });
     });
   }
 
-  void _addItem(){
+  void _addItem() {
     setState(() {
       Map<String, dynamic> newItem = Map();
       newItem["title"] = _itemController.text;
@@ -129,10 +126,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF2c3e50),
-        title: Text("Agendar Reunião", style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),),
+        title: Text(
+          "Agendar Reunião",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0,
+          ),
+        ),
       ),
       body: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,10 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 100.0, width: 10.0,),
+              SizedBox(
+                height: 100.0,
+                width: 10.0,
+              ),
               // Texto tipo de reunião
               Container(
                 width: 120,
@@ -152,11 +155,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Center(
-                  child: Text("Tipo de reunião", style: TextStyle(
-                      color: Color(0xFF2c3e50),
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold
-                  ),),
+                  child: Text(
+                    "Tipo de reunião",
+                    style: TextStyle(
+                        color: Color(0xFF2c3e50),
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               // Selecionar tipo de reunião
@@ -169,72 +174,50 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                 ),
                 child: Center(
                   child: DropdownButton(
+                    value: selectedType,
                     items: _meetingType
                         .map((value) => DropdownMenuItem(
-                      child: Text(
-                        value,
-                        style: TextStyle(color: Color(0xFF2c3e50),),
-                      ),
-                      value: value,
-                    ))
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  color: Color(0xFF2c3e50),
+                                ),
+                              ),
+                              value: value,
+                            ))
                         .toList(),
-                    onChanged: (selectedMeetingType){
-                      print('$selectedMeetingType');
-                      setState(() {
-                        selectedMeetingType = selectedMeetingType;
-                      });
-                      setState(() {
-                        selectedType = selectedMeetingType;
-                      });
+                    onChanged: (selectedMeetingType) {
+                      switch(selectedMeetingType){
+                        case 'Ordinária' :
+                          print('$selectedMeetingType');
+                          setState(() {
+                            selectedMeetingType = selectedMeetingType;
+                          });
+                          setState(() {
+                            selectedType = selectedMeetingType;
+                          });
+                          break;
+                        case 'Extraordinária' :
+                          Navigator.push(context,
+                          MaterialPageRoute(
+                            builder: (context) => ReuniaoExtraordinaria(),
+                          ),
+                          );
+                          break;
+                        case 'Continuidade' :
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) => ReuniaoContinuidade(),
+                          ),);
+                      }
                     },
-                    value: selectedType,
                     isExpanded: false,
-                    hint: Text('Selecione tipo de reunião',
+                    hint: Text(
+                      'Selecione tipo de reunião',
                       style: TextStyle(
                         color: Color(0xFF2c3e50),
                         fontSize: 13.0,
                       ),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 20.0,),
-              Container(
-                width: 200.0,
-                height: 30.0,
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReuniaoContinuidade(),
-                      ),
-                    );
-                  },
-                  color: Colors.grey,
-                  child: Text(
-                    "Reunião de Continuidade",
-                    style: TextStyle(color: Colors.grey[350]),
-                  ),
-                ),
-              ),
-              SizedBox(width: 20.0,),
-              Container(
-                width: 200.0,
-                height: 30.0,
-                child: FlatButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReuniaoExtraordinaria(),
-                      ),
-                    );
-                  },
-                  color: Colors.grey,
-                  child: Text(
-                    "Reunião extraordinária",
-                    style: TextStyle(color: Colors.grey[350]),
                   ),
                 ),
               ),
@@ -244,15 +227,19 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           /*------------------------- IDENTIFICAÇÃO DA REUNIÃO --------------*/
 
           Center(
-            child: Text("Identificação da reunião", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
+            child: Text(
+              "Identificação da reunião",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          SizedBox(height: 20.0,),
+          SizedBox(
+            height: 20.0,
+          ),
           // TEXTO DATA/HORA
           Container(
             child: Row(
@@ -264,15 +251,19 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   height: 50.0,
                   //color: Colors.brown[100],
                   child: Center(
-                    child: Text("Data/Hora", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Data/Hora",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 // Campo de data e hora
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // -------------------------------------------- Inserir Data
                 Expanded(
                   child: Container(
@@ -285,29 +276,37 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           selectedDate(context);
                         },
                         label: Text('Data'),
-                        icon: Icon(Icons.event, color: Color(0xFF2c3e50),
+                        icon: Icon(
+                          Icons.event,
+                          color: Color(0xFF2c3e50),
                           size: 30.0,
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // // ---------------------------------------- Texto "Início"
                 Container(
                   width: 100.0,
                   height: 50.0,
                   //color: Colors.brown[100],
                   child: Center(
-                    child: Text("Inicio", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Inicio",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 // campo de hora inicio
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // ----------------------------------- Inserir horário inicial
                 Expanded(
                   child: Container(
@@ -320,7 +319,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           selectTime(context);
                         },
                         label: Text('Hora'),
-                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                        icon: Icon(
+                          Icons.schedule,
+                          color: Color(0xFF2c3e50),
                           size: 30.0,
                         ),
                       ),
@@ -328,21 +329,27 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   ),
                 ),
                 // campo de hora fim
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // ----------------------------------------------- Texto "Até"
                 Container(
                   width: 60.0,
                   height: 50.0,
                   //color: Colors.brown[100],
                   child: Center(
-                    child: Text("Até", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Até",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // ----------------------------------- Inserir horário final
                 Expanded(
                   child: Container(
@@ -355,7 +362,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           selectTimeF(context);
                         },
                         label: Text('Hora'),
-                        icon: Icon(Icons.schedule, color: Color(0xFF2c3e50),
+                        icon: Icon(
+                          Icons.schedule,
+                          color: Color(0xFF2c3e50),
                           size: 30.0,
                         ),
                       ),
@@ -363,7 +372,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   ),
                 ),
                 // text local
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // ----------------------------------- Texto Local da reunião
                 Container(
                   width: 150.0,
@@ -371,16 +382,18 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   //color: Colors.brown[100],
                   child: Center(
                     child: Text(
-                      "Local de reunião", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),
+                      "Local de reunião",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
                 // Campo de colocar local
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 // ----------------------------------- Inserir local de reunião
                 Expanded(
                   child: Container(
@@ -397,13 +410,15 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                         ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                            //hintText: "Local de reunião"
+                          //hintText: "Local de reunião"
                         ),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 30.0,),
+                SizedBox(
+                  width: 30.0,
+                ),
               ],
             ),
           ),
@@ -411,15 +426,19 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           /*--------------------FIM IDENTIFICAÇÃO DA REUNIÃO ----------------*/
 
           /*--------------------INICIO OBJETIVO DA REUNIÃO ----------------*/
-          SizedBox(height: 20.0,),
+          SizedBox(
+            height: 20.0,
+          ),
           // ------------------------ TEXTO OBJETIVOS
           Center(
-            child: Text("Objetivos", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
+            child: Text(
+              "Objetivos",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Container(
@@ -430,11 +449,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   width: 100.0,
                   height: 50.0,
                   child: Center(
-                    child: Text("Objetivo", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Objetivo",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 // ------------------------ Inserir objetivo de reunião
@@ -458,7 +479,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     ),
                   ),
                 ),
-                SizedBox(width: 30.0,),
+                SizedBox(
+                  width: 30.0,
+                ),
               ],
             ),
           ),
@@ -466,12 +489,14 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
 
           /*------------------- PARTICIPANTES DE REUNIÃO ----------------*/
           Center(
-            child: Text("Participantes da reunião", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
+            child: Text(
+              "Participantes da reunião",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Container(
@@ -482,11 +507,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   width: 100.0,
                   height: 50.0,
                   child: Center(
-                    child: Text("Participantes", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Participantes",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -497,14 +524,16 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     child: DropdownButton(
                       items: _convocados
                           .map((value) => DropdownMenuItem(
-                        child: Text(
-                          value,
-                          style: TextStyle(color: Color(0xFF2c3e50),),
-                        ),
-                        value: value,
-                      ))
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: Color(0xFF2c3e50),
+                                  ),
+                                ),
+                                value: value,
+                              ))
                           .toList(),
-                      onChanged: (selectedConvocados){
+                      onChanged: (selectedConvocados) {
                         print('$selectedConvocados');
                         setState(() {
                           selectedConvocados = selectedConvocados;
@@ -515,7 +544,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                       },
                       value: selectedPessoa,
                       isExpanded: true,
-                      hint: Text('Selecione participantes',
+                      hint: Text(
+                        'Selecione participantes',
                         style: TextStyle(
                           color: Colors.grey[700],
                           fontSize: 14.0,
@@ -534,12 +564,14 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           /*--------------------- RESPONSÁVEL DE REUNIÃO ----------------*/
           // Texto "Responsável"
           Center(
-            child: Text("Solicitante da reunião", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
+            child: Text(
+              "Solicitante da reunião",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Container(
@@ -550,11 +582,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                   width: 100.0,
                   height: 50.0,
                   child: Center(
-                    child: Text("Responsável", style: TextStyle(
-                        color: Color(0xFF2c3e50),
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold
-                    ),),
+                    child: Text(
+                      "Responsável",
+                      style: TextStyle(
+                          color: Color(0xFF2c3e50),
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 // ------------------------ NOME DO RESPONSÁVEL REUNIÃO
@@ -570,14 +604,16 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                       child: DropdownButton(
                         items: _responsaveis
                             .map((value) => DropdownMenuItem(
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Color(0xFF2c3e50),),
-                          ),
-                          value: value,
-                        ))
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      color: Color(0xFF2c3e50),
+                                    ),
+                                  ),
+                                  value: value,
+                                ))
                             .toList(),
-                        onChanged: (selectedResponsaveis){
+                        onChanged: (selectedResponsaveis) {
                           print('$selectedResponsaveis');
                           setState(() {
                             selectedResponsaveis = selectedResponsaveis;
@@ -588,7 +624,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                         },
                         value: selectedResponsavel,
                         isExpanded: true,
-                        hint: Text('Selecione Responsável',
+                        hint: Text(
+                          'Selecione Responsável',
                           style: TextStyle(
                             color: Colors.grey[700],
                             fontSize: 14.0,
@@ -598,7 +635,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                     ),
                   ),
                 ),
-                SizedBox(width: 30.0,),
+                SizedBox(
+                  width: 30.0,
+                ),
               ],
             ),
           ),
@@ -606,12 +645,14 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
 
           /*------------------ INÍCIO PAUTA DE REUNIÃO -----------------*/
           Center(
-            child: Text("Itens que serão discutidos em reunião", style: TextStyle(
-              color: Colors.grey,
-              fontSize: 12.0,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
-            ),
+            child: Text(
+              "Itens que serão discutidos em reunião",
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 12.0,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Flexible(
@@ -629,11 +670,13 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           width: 100.0,
                           height: 50.0,
                           child: Center(
-                            child: Text("Pauta", style: TextStyle(
-                                color: Color(0xFF2c3e50),
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold
-                            ),),
+                            child: Text(
+                              "Pauta",
+                              style: TextStyle(
+                                  color: Color(0xFF2c3e50),
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                         // ------------------------ Inserir itens de pauta
@@ -656,7 +699,9 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                             ),
                           ),
                         ),
-                        SizedBox(width: 5.0,),
+                        SizedBox(
+                          width: 5.0,
+                        ),
 
                         // Boão adicionar item de pauta
 
@@ -667,13 +712,16 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                           child: FlatButton(
                             onPressed: _addItem,
                             color: Color(0xFFbdc3c7),
-                            child: Text("ADD", style: TextStyle(
-                                color: Color(0xFF2c3e50),
-                                fontSize: 12.0
-                            ),),
+                            child: Text(
+                              "ADD",
+                              style: TextStyle(
+                                  color: Color(0xFF2c3e50), fontSize: 12.0),
+                            ),
                           ),
                         ),
-                        SizedBox(width: 30.0,),
+                        SizedBox(
+                          width: 30.0,
+                        ),
                       ],
                     ),
                   ),
@@ -683,8 +731,7 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
                         scrollDirection: Axis.vertical,
                         padding: EdgeInsets.only(top: 5.0),
                         itemCount: _itensDePauta.length,
-                        itemBuilder: buildItem
-                    ),
+                        itemBuilder: buildItem),
                   ),
                   // TEXTO PAUTA, TEXTFIELD ADD ITEM DE PAUTA, BOTAO ADD
 
@@ -694,43 +741,55 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
               ),
             ),
           ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FlatButton.icon(
-                  onPressed: (){
-                    Navigator.push(context,
-                    MaterialPageRoute(
-                      builder: (context) => PreviewAgendamento(),
-                    ),);
-                  },
-                  color: Color(0xFF2c3e50),
-                  icon: Icon(Icons.event, color: Colors.white,),
-                  label: Text("Agendar", style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                  ),),
-                ),
-                SizedBox(width: 10.0,),
-                FlatButton.icon(
-                  onPressed: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(
-                          builder: (context) => Home(),
-                        ),
-                    );
-                  },
-                  color: Colors.red,
-                  icon: Icon(Icons.cancel, color: Colors.white,),
-                  label: Text("Cancelar", style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                  ),),
-                ),
-              ]
-          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            FlatButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PreviewAgendamento(),
+                  ),
+                );
+              },
+              color: Color(0xFF2c3e50),
+              icon: Icon(
+                Icons.event,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Agendar",
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            FlatButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Home(),
+                  ),
+                );
+              },
+              color: Colors.red,
+              icon: Icon(
+                Icons.cancel,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Cancelar",
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ),
+          ]),
           /*FlatButton.icon(
               onPressed: (){},
               icon: Icon(Icons.add),
@@ -742,14 +801,18 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
       ),
     );
   }
-  Widget buildItem(context, index){
+
+  Widget buildItem(context, index) {
     return Dismissible(
       key: Key(DateTime.now().millisecondsSinceEpoch.toString()),
       background: Container(
         color: Colors.red,
         child: Align(
           alignment: Alignment(-0.9, 0.0),
-          child: Icon(Icons.delete, color: Colors.white,),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
         ),
       ),
       direction: DismissDirection.startToEnd,
@@ -777,7 +840,8 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
 
           final snack = SnackBar(
             content: Text("Item \"${_lastRemoved["title"]}\" removido"),
-            action: SnackBarAction(label: "Desfazer",
+            action: SnackBarAction(
+                label: "Desfazer",
                 onPressed: () {
                   setState(() {
                     _itensDePauta.insert(_lastRemovedPos, _lastRemoved);
@@ -788,17 +852,17 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
           );
 
           Scaffold.of(context).showSnackBar(snack);
-        }
-        );
+        });
       },
     );
   }
 
   // Obter arquivo
-  Future<File> _getFile()  async {
+  Future<File> _getFile() async {
     final directory = await getApplicationDocumentsDirectory();
     return File("${directory.path}/data.json");
   }
+
   // pega a lista, transformando a lista em um json e armazenando
   // numa String data
 
@@ -811,7 +875,7 @@ class _AgendarReuniaoState extends State<AgendarReuniao> {
 
   // Ler arquivo
   Future<String> _readData() async {
-    try{
+    try {
       final file = await _getFile();
 
       return file.readAsString();
